@@ -23,12 +23,12 @@ public class ScheduledTasks {
     private static final String BLOCK_CHAIN_INFO_URL = "https://blockchain.info/markets/data/tickers.json";
     private static final String COIN_DESK_URL = "https://api.coindesk.com/v1/bpi/currentprice/VND.json";
 
-    private static Coin localbitcoins;
-    private static Coin bitfinex;
-    private static Coin kraken;
-    private static Coin bitstamp;
-    private static Coin btce;
-    private static Coin coindesk;
+    private static Coin localbitcoins = new Coin();
+    private static Coin bitfinex = new Coin();
+    private static Coin kraken = new Coin();
+    private static Coin bitstamp = new Coin();
+    private static Coin btce = new Coin();
+    private static Coin coindesk = new Coin();
 
     private JsonObject getJsonObjectFromUrl(String url) throws IOException {
         InputStreamReader reader = new InputStreamReader(new URL(url).openStream());
@@ -49,7 +49,7 @@ public class ScheduledTasks {
         Coin kraken = getCoinValueBlockChainInfo("kraken");
         Coin bitstamp = getCoinValueBlockChainInfo("bitstamp");
         Coin btce = getCoinValueBlockChainInfo("btce");
-        Coin coindesk = getCoinValueCoinDesk("VND",this.coindesk);
+        coindesk = getCoinValueCoinDesk("USD",coindesk);
     }
 
     private Coin getCoinValueBlockChainInfo(String exchangeName) throws IOException {
@@ -69,9 +69,8 @@ public class ScheduledTasks {
         coin.setPrice(getExchangeValueFromCoinSource(COIN_DESK_URL,"bpi").getAsJsonObject()
                 .get(coin.getCurrency()).getAsJsonObject().get("rate_float").getAsDouble());
 
-        if (compareCoin!=null && coin.compareTo(compareCoin)!=0) {
-            coin.setDiff(coin.getPrice()-compareCoin.getPrice());
-            compareCoin = coin.clone();
+        if (coin.compareTo(compareCoin)!=0||compareCoin==null) {
+            coin.setDiff(coin.getPrice()-(compareCoin.getPrice()!=null?compareCoin.getPrice():0));
             log.info("Data changed: {}", coin.getPrice()+", Diff: "+ coin.getDiff());
         }
         return coin;

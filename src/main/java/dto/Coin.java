@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Coin implements Comparable<Coin>, Cloneable{
+public class Coin implements Comparable<Coin>{
     private String name;
     private String currency;
     private Double price;
@@ -13,16 +13,12 @@ public class Coin implements Comparable<Coin>, Cloneable{
 
     @Override
     public int compareTo(Coin o) {
+        if (o.getPrice()==null) return 1;
         if (this.getPrice() < o.getPrice())
             return -1;
         if (this.getPrice().equals(o.getPrice()))
             return 0;
 
         return 1;
-    }
-
-    @Override
-    public Coin clone() throws CloneNotSupportedException {
-        return (Coin)super.clone();
     }
 }
