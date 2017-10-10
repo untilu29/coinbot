@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import util.HttpUtil;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -42,14 +43,16 @@ public class ScheduledTasks {
 
     @Scheduled(fixedRate = 5000)
     public void reportCurrentTime() throws IOException, CloneNotSupportedException {
-        log.info("The time is now {}", dateFormat.format(new Date()));
-
+//        log.info("The time is now {}", dateFormat.format(new Date()));
         Coin localbitcoins = getCoinValueBlockChainInfo("localbitcoins");
         Coin bitfinex = getCoinValueBlockChainInfo("bitfinex");
         Coin kraken = getCoinValueBlockChainInfo("kraken");
         Coin bitstamp = getCoinValueBlockChainInfo("bitstamp");
         Coin btce = getCoinValueBlockChainInfo("btce");
         coindesk = getCoinValueCoinDesk("USD",coindesk);
+
+
+        HttpUtil.sendMessageToClient("1253441478095834","test message","EAAL5ycDfOXgBAIj9hfNJmagKW8OiTzSbqNoUiVTOMLJ8RTwezKUCmIuS4AIM6QodiRqfxIYBjXb6zyfpfQvUuZBH3YKohZAGw7MwCcNip5QlCqLKTkZCC0h1PhwFAnvHyApnhVbXzfBTBwPA9yGZCylAXhEKgJxiZAfkfSjYlQgZDZD");
     }
 
     private Coin getCoinValueBlockChainInfo(String exchangeName) throws IOException {
