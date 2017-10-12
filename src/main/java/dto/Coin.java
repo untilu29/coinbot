@@ -9,6 +9,7 @@ public class Coin implements Comparable<Coin>{
     private String name;
     private String currency;
     private Double price;
+    private String rate;
     private Double diff;
 
     @Override
